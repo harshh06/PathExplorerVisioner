@@ -1,0 +1,10 @@
+.container {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+.main-header {
+  background-color: #d3d3d3;
+  color: #2f4f4f;
+}

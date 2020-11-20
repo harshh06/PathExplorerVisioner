@@ -1,3 +1,4 @@
+// Displays the header for the site ..
 import React, { Component } from "react";
 import "./Visualizer.css";
 

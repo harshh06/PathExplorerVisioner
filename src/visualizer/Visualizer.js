@@ -57,7 +57,7 @@ export default class Visualizer extends Component {
 
   // visualizing part begins...
 
-  animateDijkstra(visitedNodesInOrder) {
+  animateBFS(visitedNodesInOrder) {
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
       // if (i === visitedNodesInOrder.length) {
       //   setTimeout(() => {
@@ -98,7 +98,7 @@ export default class Visualizer extends Component {
     const enddingNode = nodes[endNodeRow][endNodeCol];
     if (algorithm === "bfs") {
       let visitedNodeInOrder = bfs(nodes, beginningNode, enddingNode);
-      this.animateDijkstra(visitedNodeInOrder);
+      this.animateBFS(visitedNodeInOrder);
       //console.log(visitedNodeInOrder[0]);
     }
   }

@@ -10,12 +10,9 @@
 }
 
 .grid-container {
-  margin: 5% auto;
+  margin: 1% auto;
 }
 
-td {
-  width: 30px;
-  height: 30px;
-  outline: 1px solid #d3d3d3;
-  display: inline-block;
+#visualize-btn {
+  margin: 2% auto;
 }

@@ -19,7 +19,7 @@
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-direction: alternate;
-  animation-iteration-count: 1;
+  animation-iteration-count: 5;
   animation-fill-mode: forwards;
   animation-play-state: running;
 }
@@ -27,10 +27,9 @@
 @keyframes visitedAnimation {
   0% {
     transform: scale(0.3);
-    background-color: rgba(0, 0, 66, 0.75);
-    border-radius: 100%;
+    background-color: #fffb01ed;
   }
-
+  /* 
   50% {
     background-color: rgba(17, 104, 217, 0.75);
   }
@@ -38,10 +37,10 @@
   75% {
     transform: scale(1.2);
     background-color: rgba(0, 217, 159, 0.75);
-  }
+  } */
 
   100% {
     transform: scale(1);
-    background-color: rgba(0, 190, 218, 0.75);
+    background-color: rgb(221, 188, 4);
   }
 }

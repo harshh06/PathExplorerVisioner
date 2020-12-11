@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Node from "./Node";
 import "./Visualizer.css";
-import { bfs } from "../algorithm/bfs";
+import { bfs, nodesInShortestPath } from "../algorithm/bfs";
 //import { getElementError } from "@testing-library/react";
 
 export default class Visualizer extends Component {
@@ -51,20 +51,22 @@ export default class Visualizer extends Component {
         col === this.state.startNodeCol && row === this.state.endNodeRow,
       endNode: col === this.state.endNodeCol && row === this.state.endNodeRow,
       isVisited: false,
+      parentNode: null,
     };
   };
   //grid Formation ends...
 
   // visualizing part begins...
 
-  animateBFS(visitedNodesInOrder) {
+  animateBFS(visitedNodesInOrder, shortestPathNodeInOrder) {
+    console.log(visitedNodesInOrder.length);
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
-      // if (i === visitedNodesInOrder.length) {
-      //   setTimeout(() => {
-      //     this.animateShortestPath(nodesInShortestPathOrder);
-      //   }, 10 * i);
-      //   return;
-      // }
+      if (i === visitedNodesInOrder.length - 1) {
+        setTimeout(() => {
+          this.animateShortestPath(shortestPathNodeInOrder);
+        }, 15 * i);
+        return;
+      }
 
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
@@ -84,6 +86,29 @@ export default class Visualizer extends Component {
       }, 10 * i);
     }
   }
+  animateShortestPath(nodesInShortestPathOrder) {
+    for (let i = 0; i < nodesInShortestPathOrder.length - 1; i++) {
+      if (nodesInShortestPathOrder[i] === "end") {
+        setTimeout(() => {
+          this.toggleIsRunning();
+        }, i * 50);
+      } else {
+        setTimeout(() => {
+          const node = nodesInShortestPathOrder[i];
+          const nodeClassName = document.getElementById(
+            `node-${node.row}-${node.col}`
+          ).className;
+          if (
+            nodeClassName !== "node node-start" &&
+            nodeClassName !== "node node-finish"
+          ) {
+            document.getElementById(`node-${node.row}-${node.col}`).className =
+              "node node-shortest-path";
+          }
+        }, i * 40);
+      }
+    }
+  }
 
   visualize(algorithm) {
     const {
@@ -98,8 +123,12 @@ export default class Visualizer extends Component {
     const enddingNode = nodes[endNodeRow][endNodeCol];
     if (algorithm === "bfs") {
       let visitedNodeInOrder = bfs(nodes, beginningNode, enddingNode);
-      this.animateBFS(visitedNodeInOrder);
-      //console.log(visitedNodeInOrder[0]);
+      let shortestPathNodeInOrder = nodesInShortestPath(
+        visitedNodeInOrder,
+        enddingNode
+      );
+      this.animateBFS(visitedNodeInOrder, shortestPathNodeInOrder);
+      console.log(shortestPathNodeInOrder.length);
     }
   }
 

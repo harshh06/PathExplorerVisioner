@@ -1,6 +1,4 @@
-//const parentNode = [][];
-
-export function bfs(grid, beginNode, finishNode) {
+export function bfs(grid, beginNode) {
   let q = [beginNode];
   const visitedNodesInOrder = [beginNode];
   beginNode.isVisited = true;
@@ -15,30 +13,36 @@ export function bfs(grid, beginNode, finishNode) {
       q.push(grid[row - 1][col]);
       visitedNodesInOrder.push(grid[row - 1][col]);
       grid[row - 1][col].isVisited = true;
-      //parentNode[row - 1][col] = currentNode;
+      grid[row - 1][col].parentNode = currentNode;
     }
     if (row < grid.length - 1 && !grid[row + 1][col].isVisited) {
       q.push(grid[row + 1][col]);
       visitedNodesInOrder.push(grid[row + 1][col]);
       grid[row + 1][col].isVisited = true;
-      //parentNode[row + 1][col] = currentNode;
+      grid[row + 1][col].parentNode = currentNode;
     }
     if (col > 0 && !grid[row][col - 1].isVisited) {
       q.push(grid[row][col - 1]);
       visitedNodesInOrder.push(grid[row][col - 1]);
       grid[row][col - 1].isVisited = true;
-      //parentNode[row][col - 1] = currentNode;
+      grid[row][col - 1].parentNode = currentNode;
     }
     if (col < grid[0].length - 1 && !grid[row][col + 1].isVisited) {
       q.push(grid[row][col + 1]);
       visitedNodesInOrder.push(grid[row][col + 1]);
       grid[row][col + 1].isVisited = true;
-      // parentNode[row][col + 1] = currentNode;
+      grid[row][col + 1].parentNode = currentNode;
     }
   }
   return -1;
 }
 
 export function nodesInShortestPath(visitedNodeInOrder, finishNode) {
-  let shortestPathNodes = [finishNode];
+  let shortestPathNodes = [];
+  let currentNode = finishNode;
+  while (currentNode.parentNode != null) {
+    shortestPathNodes.unshift(currentNode);
+    currentNode = currentNode.parentNode;
+  }
+  return shortestPathNodes;
 }

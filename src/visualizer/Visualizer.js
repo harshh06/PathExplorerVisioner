@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import Node from "./Node";
 import "./Visualizer.css";
 import { bfs, nodesInShortestPath } from "../algorithm/bfs";
+import { dfs } from "../algorithm/dfs";
+import { dijkstra } from "../algorithm/dijkstra";
+import { AStar } from "../algorithm/astar";
 //import { getElementError } from "@testing-library/react";
 
 export default class Visualizer extends Component {
@@ -18,6 +21,7 @@ export default class Visualizer extends Component {
       startNode: false,
       endNode: false,
       isVisited: false,
+      isRunning: false,
     };
   }
   // Grid Formation begin ..
@@ -52,9 +56,56 @@ export default class Visualizer extends Component {
       endNode: col === this.state.endNodeCol && row === this.state.endNodeRow,
       isVisited: false,
       parentNode: null,
+      distance: Infinity,
     };
   };
   //grid Formation ends...
+
+  // clear grid ...
+
+  clearGrid() {
+    if (!this.state.isRunning) {
+      const newGrid = this.state.nodes.slice();
+      for (const row of newGrid) {
+        for (const node of row) {
+          let nodeClassName = document.getElementById(
+            `node-${node.row}-${node.col}`
+          ).className;
+          if (
+            nodeClassName !== "node startNode" &&
+            nodeClassName !== "node endNode" &&
+            nodeClassName !== "node node-wall"
+          ) {
+            document.getElementById(`node-${node.row}-${node.col}`).className =
+              "node";
+            node.isVisited = false;
+            node.distance = Infinity;
+            // node.distanceToFinishNode =
+            //   Math.abs(this.state.FINISH_NODE_ROW - node.row) +
+            //   Math.abs(this.state.FINISH_NODE_COL - node.col);
+          }
+          if (nodeClassName === "node node-finish") {
+            node.isVisited = false;
+            node.distance = Infinity;
+            node.distanceToFinishNode = 0;
+          }
+          if (nodeClassName === "node node-start") {
+            node.isVisited = false;
+            node.distance = Infinity;
+            node.distanceToFinishNode =
+              Math.abs(this.state.FINISH_NODE_ROW - node.row) +
+              Math.abs(this.state.FINISH_NODE_COL - node.col);
+            node.isStart = true;
+            node.isWall = false;
+            node.previousNode = null;
+            node.isNode = true;
+          }
+        }
+      }
+    }
+  }
+
+  // end clear grid finction
 
   // visualizing part begins...
 
@@ -129,6 +180,31 @@ export default class Visualizer extends Component {
       );
       this.animateBFS(visitedNodeInOrder, shortestPathNodeInOrder);
       console.log(shortestPathNodeInOrder.length);
+    } else if (algorithm === "dfs") {
+      let visitedNodeInOrder = dfs(nodes, beginningNode, enddingNode);
+      let shortestPathNodeInOrder = nodesInShortestPath(
+        visitedNodeInOrder,
+        enddingNode
+      );
+      this.animateBFS(visitedNodeInOrder, shortestPathNodeInOrder);
+      console.log(shortestPathNodeInOrder.length);
+    } else if (algorithm === "dijkstra") {
+      let visitedNodeInOrder = dijkstra(nodes, beginningNode, enddingNode);
+      let shortestPathNodeInOrder = nodesInShortestPath(
+        visitedNodeInOrder,
+        enddingNode
+      );
+      this.animateBFS(visitedNodeInOrder, shortestPathNodeInOrder);
+      console.log(shortestPathNodeInOrder.length);
+    } else if (algorithm === "astar") {
+      let visitedNodeInOrder = AStar(nodes, beginningNode, enddingNode);
+      console.log(visitedNodeInOrder.length);
+      let shortestPathNodeInOrder = nodesInShortestPath(
+        visitedNodeInOrder,
+        enddingNode
+      );
+      this.animateBFS(visitedNodeInOrder, shortestPathNodeInOrder);
+      console.log(shortestPathNodeInOrder.length);
     }
   }
 
@@ -146,7 +222,47 @@ export default class Visualizer extends Component {
           className="btn btn-success"
         >
           {" "}
-          Visualize{" "}
+          BFS{" "}
+        </button>
+        <button
+          onClick={() => {
+            this.visualize("dfs");
+          }}
+          id="visualize-btn"
+          className="btn btn-success"
+        >
+          {" "}
+          DFS{" "}
+        </button>
+        <button
+          onClick={() => {
+            this.visualize("dijkstra");
+          }}
+          id="visualize-btn"
+          className="btn btn-success"
+        >
+          {" "}
+          Dijkstra{" "}
+        </button>
+        <button
+          onClick={() => {
+            this.visualize("astar");
+          }}
+          id="visualize-btn"
+          className="btn btn-success"
+        >
+          {" "}
+          A*{" "}
+        </button>
+        <button
+          onClick={() => {
+            this.clearGrid();
+          }}
+          id="visualize-btn"
+          className="btn btn-success"
+        >
+          {" "}
+          Clear grid{" "}
         </button>
         <table className="grid-container">
           <tbody>

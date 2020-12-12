@@ -12,6 +12,9 @@
 .endNode {
   background-color: red;
 }
+.node-wall {
+  background-color: rgb(12, 53, 71);
+}
 
 .node-visited {
   animation-name: visitedAnimation;
